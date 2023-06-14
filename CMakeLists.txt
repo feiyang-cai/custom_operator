@@ -14,3 +14,4 @@ include_directories(${ONNXRUNTIME_ROOT}/build/Linux/RelWithDebInfo/_deps/gsl-src
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
 # Add your custom op source file
 add_library(custom_dynamics SHARED custom_dynamics_library.cc custom_dynamics_library.h)
+target_link_libraries(custom_dynamics PRIVATE -static-libstdc++)
