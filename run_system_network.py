@@ -1,9 +1,9 @@
 import numpy as np
 import onnxruntime as rt
 
-p_range = [-6, -5]
+p_range = [-6, -3]
 theta_range = [0, 30]
-p_num_bin = 8
+p_num_bin = 24
 theta_num_bin = 74
 p_bins = np.linspace(p_range[0], p_range[1], p_num_bin+1, endpoint=True)
 p_lbs = np.array(p_bins[:-1],dtype=np.float32)
@@ -31,7 +31,7 @@ shared_library = "./lib/libcustom_dynamics.so"
 so = rt.SessionOptions()
 so.register_custom_ops_library(shared_library)
 
-model_path = './models/system_model.onnx'
+model_path = './models/system_model_3_1.onnx'
 sess = rt.InferenceSession(model_path, so)
 
 input_name = sess.get_inputs()[0].name
@@ -61,10 +61,10 @@ for theta_lb in theta_lbs:
 
 ax.set_xticks(p_bins)
 ax.set_yticks(theta_bins)
-ax.set_xticks([-6, -5.8, -5.6, -5.4, -5.2, -5])
-ax.set_yticks([0, 2, 4, 6])
-ax.set_xlim([-6, -5])
-ax.set_ylim([0, 7])
+ax.set_xticks([i for i in np.arange(-6, -3.6, 0.2)])
+ax.set_yticks([i for i in np.arange(0, 20, 2)])
+ax.set_xlim([-6, -3.6])
+ax.set_ylim([0, 20])
 ax.set_xlabel(r"$p$ (m)")
 ax.set_ylabel(r"$\theta$ (degrees)")
 

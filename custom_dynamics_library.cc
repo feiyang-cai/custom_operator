@@ -74,9 +74,13 @@ struct DynamicsKernel {
 
     out[0] = X[0]; // z0
     out[1] = X[1]; // z1
-    out[2] = X[2] + std::sin(X[3]) * 0.25f; // p
-    out[3] = X[3] + std::tan(X[4]) * 0.05f; // theta
+    out[2] = X[2];
+    out[3] = X[3];
     out[4] = X[4];
+    for (int i = 0; i < 20; i++) {
+      out[2] = out[2] + std::sin(out[3]) * 0.25f; // p
+      out[3] = out[3] + std::tan(out[4]) * 0.05f; // theta
+    }
 
   }
   private:

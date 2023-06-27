@@ -205,7 +205,7 @@ if __name__ == '__main__':
     post_dynamics_model_path = "./models/post_dynamics.onnx"
 
     step = 1
-    substep = 20
+    substep = 1
 
     assert os.path.exists(gan_model_path) or \
         (os.path.exists(pre_dynamics_model_path) and \
@@ -330,4 +330,4 @@ if __name__ == '__main__':
 
     system_model = helper.make_model(system_graph, producer_name='Feiyang Cai')
     print(system_model.graph.output)
-    onnx.save_model(system_model, "./models/system_model.onnx")
+    onnx.save_model(system_model, f"./models/system_model_{step}_{substep}.onnx")

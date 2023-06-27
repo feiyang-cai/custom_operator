@@ -4,7 +4,7 @@ project(custom_dynamics)
 set(CMAKE_CXX_STANDARD 17)
 
 # Set the path to ONNX Runtime
-set(ONNXRUNTIME_ROOT "/home/feiyang/Packages/onnxruntime")
+set(ONNXRUNTIME_ROOT "/mydata/onnxruntime")
 
 # Include ONNX Runtime headers
 include_directories(${ONNXRUNTIME_ROOT}/include/onnxruntime/)
