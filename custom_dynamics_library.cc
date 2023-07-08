@@ -68,18 +68,34 @@ struct DynamicsKernel {
     const float* X = ort_.GetTensorData<float>(input);
     // Setup output
     OrtTensorDimensions dimensions(ort_, input);
+
+    OrtTensorTypeAndShapeInfo* input_info = ort_.GetTensorTypeAndShape(input);
+    int64_t size = ort_.GetTensorShapeElementCount(input_info);
+    //std::cout << "size = " << size << std::endl;
+    //std::cout << "dimensions.size() = " << dimensions.data() << std::endl;
+
+
     OrtValue* output = ort_.KernelContext_GetOutput(context, 0, dimensions.data(), dimensions.size());
     float* out = ort_.GetTensorMutableData<float>(output);
     //float* out = output.GetTensorMutableData<float>();
 
-    out[0] = X[0]; // z0
-    out[1] = X[1]; // z1
-    out[2] = X[2];
-    out[3] = X[3];
-    out[4] = X[4];
+    for (int i = 0; i < size; i++){
+      out[i] = X[i];
+      //std::cout << "out[" << i << "] = " << out[i] << std::endl;
+    }
+
+    //out[0] = X[0]; // z0
+    //out[1] = X[1]; // z1
+    //out[2] = X[2];
+    //out[3] = X[3];
+    //out[4] = X[4];
+
+    int64_t p_dim = (size>=5) ? 2 : 0;
+    int64_t theta_dim = (size>=5) ? 3 : 1;
+
     for (int i = 0; i < 20; i++) {
-      out[2] = out[2] + std::sin(out[3]) * 0.25f; // p
-      out[3] = out[3] + std::tan(out[4]) * 0.05f; // theta
+      out[p_dim] = out[p_dim] + std::sin(out[theta_dim]) * 0.25f; // p
+      out[theta_dim] = out[theta_dim] + std::tan(out[size-1]) * 0.05f; // theta
     }
 
   }
