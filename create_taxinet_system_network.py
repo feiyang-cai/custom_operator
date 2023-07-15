@@ -7,6 +7,9 @@ from onnx import helper
 p_normalizer = 6.366468343804353
 theta_normalizer = 17.248858791583547
 
+coeff_p = -0.2
+coeff_theta = -0.1
+
 def create_gan(gan_model_path, step):
     class GANNet(nn.Module):
         def __init__(self):
@@ -169,8 +172,8 @@ def create_controller_net(step):
         temp = torch.eye(2+(step-1)*2, dtype=torch.float32)
         param.data = torch.cat((temp, torch.zeros((2+(step-1)*2, 2), dtype=torch.float32)), dim=1)
         param.data = torch.cat((param.data, torch.zeros((1, 2+step*2), dtype=torch.float32)), dim=0)
-        param.data[-1, -2] = -0.74
-        param.data[-1, -1] = -0.44
+        param.data[-1, -2] = coeff_p
+        param.data[-1, -1] = coeff_theta
         
         #param.data = torch.FloatTensor([[1.0, 0.0, 0.0, 0.0, 0.0, 0.0],
         #                               [0.0, 1.0, 0.0, 0.0, 0.0, 0.0],
@@ -263,8 +266,8 @@ if __name__ == '__main__':
         # post dynamics model
         denorm_net = create_post_dynamics_net(step=i)
 
-        pre_dynamics_model_path = f"./models/pre_dynamics_step_{i}.onnx"
-        post_dynamics_model_path = f"./models/post_dynamics_step_{i}.onnx"
+        pre_dynamics_model_path = f"./models/pre_dynamics_step_{i}_{coeff_p}_{coeff_theta}.onnx"
+        post_dynamics_model_path = f"./models/post_dynamics_step_{i}_{coeff_p}_{coeff_theta}.onnx"
 
         # export them to onnx
         x = torch.randn(1, 2+i*2)
@@ -360,5 +363,5 @@ if __name__ == '__main__':
 
     system_model = helper.make_model(system_graph, producer_name='Feiyang Cai')
     print(system_model.graph.output)
-    onnx.save_model(system_model, f"./models/system_model_{step}.onnx")
+    onnx.save_model(system_model, f"./models/system_model_{step}_{coeff_p}_{coeff_theta}.onnx")
 
